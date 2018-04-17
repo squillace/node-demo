@@ -1,0 +1,9 @@
+[environments]
+  [environments.development]
+    name = "node-demo"
+    namespace = "default"
+    wait = false
+    watch = false
+    watch-delay = 2
+    auto-connect = false
+    custom-tags = ["edge", "dev"]
