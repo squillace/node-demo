@@ -88,12 +88,12 @@ events.on("push", (e, p) => {
   }).then(() => {
     return ghNotify("success", "Passed", e, p).run()
   }).catch((err) => {
-    console.log("tests failed")
+    console.log(`fatal error: ${err}`)
     return ghNotify("failure", `failed: ${err.toString()}`, e, p).run()
   })
 });
 
-function dockerBuild(tag, e, p) {
+function dockerBuild(tag, e, project) {
   const img = "technosophos/node-demo"
   const dind = new Job("dind", "docker:stable-dind");
   dind.privileged = true;
