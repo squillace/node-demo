@@ -105,7 +105,7 @@ function dockerBuild(tag, e, project) {
     `printf "waiting for docker daemon"; while ! docker info >/dev/null 2>&1; do printf .; sleep 1; done; echo`,
     "cd /src",
     `docker login -u ${project.secrets.registryUser} -p '${project.secrets.registryToken}' ${project.secrets.registryHost}`,
-    `docker build -t ${img}:${tag}`,
+    `docker build -t ${img}:${tag} .`,
     `docker tag ${img}:${tag} ${img}:latest`,
     `docker push ${img}`
   ];
