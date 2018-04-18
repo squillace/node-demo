@@ -61,7 +61,7 @@ config.validate({allowed: 'strict'});
 const app = express();
 app.get("/hello", (req, res) => {
     // Example response:
-    res.send(hello.world() + "and me");
+    res.send(hello.world());
 });
 
 // ==== BOILERPLATE ====

@@ -15,6 +15,11 @@ events.on("image_push", (e, p) => {
     return
   }
 
+  /*
+   * Unit tests
+   * These are run against the image that Draft built
+   */
+
   // We can do insane things, like construct the image name.
   const imageName = hook.repository.repo_name + ":" + hook.push_data.tag;
   const j = new Job("test", imageName)
@@ -23,14 +28,33 @@ events.on("image_push", (e, p) => {
   ];
 
   j.run().catch( err => {
-    const slack = new Job("notify-failed-tests", "technosophos/slack-notify:latest");
-    slack.env = {
-      SLACK_WEBHOOK: p.secrets.SLACK_WEBHOOK || "unknown",
-      SLACK_USERNAME: "Draft",
-      SLACK_TITLE: `Tests failed for ${ hook.repository.repo_name }`,
-      SLACK_MESSAGE: "Run `brig build logs --jobs " + e.buildID + "` to see why.",
-      SLACK_COLOR: "danger"
-    }
+    const title = `Tests failed for ${ hook.repository.repo_name }`;
+    const msg = "Run `brig build logs --jobs " + e.buildID + "` to see why.";
+    slack = slackNotify("danger", title, msg, e, p)
+    slack.run();
+  })
+
+  /*
+   * Functional tests
+   * These are run against the service that Draft started.
+   */
+
+  const funcTests = new Job("ftest", "alpine:3.7");
+  funcTests.tasks = [
+    "apk update && apk add curl"
+  ];
+
+  const uris = ["healthz", "hello"];
+  for (const uri of uris) {
+    const cmd = `curl -sf http://$NODE_DEMO_CHART_SERVICE_HOST/${ uri }`
+    funcTests.tasks.push("echo Testing " + cmd)
+    funcTests.tasks.push(cmd)
+  }
+
+  funcTests.run().catch(err => {
+    const title = `Functional tests failed for ${ hook.repository.repo_name }`;
+    const msg = "Run `brig build logs --jobs " + e.buildID + "` to see why.";
+    slack = slackNotify("danger", title, msg, e, p)
     slack.run();
   })
 })
@@ -70,4 +94,19 @@ function ghNotify(state, msg, e, project) {
     GH_COMMIT: e.revision.commit
   }
   return gh
+}
+
+var count = 0;
+
+function slackNotify(state, title, msg, e, p) {
+  const slack = new Job(`slack-notify-${count}`, "technosophos/slack-notify:latest");
+  slack.env = {
+    SLACK_WEBHOOK: p.secrets.SLACK_WEBHOOK || "unknown",
+    SLACK_USERNAME: "Draft",
+    SLACK_TITLE: title,
+    SLACK_MESSAGE: msg,
+    SLACK_COLOR: state
+  }
+  count++;
+  return slack
 }
