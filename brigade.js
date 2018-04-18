@@ -78,8 +78,6 @@ events.on("push", (e, p) => {
 
   tests.run().then( ()=> {
     console.log("tests completed successfully")
-    ghNotify("success", "Passed", e, p).run()
-  }).then(() => {
     console.log("Ref: " + gh.ref)
     if (gh.ref.startsWith("refs/tags/")) {
       const refParts = gh.ref.split("/", 3)
@@ -87,9 +85,11 @@ events.on("push", (e, p) => {
       return dockerBuild(tag, e, p).run()
     }
     return Promise.resolve(true)
+  }).then(() => {
+    return ghNotify("success", "Passed", e, p).run()
   }).catch((err) => {
     console.log("tests failed")
-    ghNotify("failure", `failed: ${err.toString()}`, e, p).run()
+    return ghNotify("failure", `failed: ${err.toString()}`, e, p).run()
   })
 });
 
