@@ -38,6 +38,7 @@ events.on("image_push", (e, p) => {
 // This is for the outer dev loop
 events.on("push", (e, p) => {
   console.log("Received GitHub push event")
+  console.log(e)
 
   // Note that we are running the source as-is, not inside of the iamge
   // created. We could do this either way. I just wanted to illustrate the
