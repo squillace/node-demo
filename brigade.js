@@ -74,14 +74,43 @@ events.on("push", (e, p) => {
     "yarn test"
   ]
 
+  gh := JSON.parse(e.payload)
+
   tests.run().then( ()=> {
     console.log("tests completed successfully")
     ghNotify("success", "Passed", e, p).run()
+  }).then(() => {
+    console.log("Ref: " + gh.ref)
+    if (gh.ref.startsWith("refs/tags/") {
+      const refParts = gh.ref.split("/", 3)
+      const tag = refParts[3]
+      return dockerBuild(tag, e, p).run()
+    }
+    return Promise.resolve(true)
   }).catch((err) => {
     console.log("tests failed")
     ghNotify("failure", `failed: ${err.toString()}`, e, p).run()
   })
 });
+
+function dockerBuild(tag, e, p) {
+  const img = "technosophos/node-demo"
+  const dind = new Job("dind", "docker:stable-dind");
+  dind.privileged = true;
+  dind.env = {
+    DOCKER_DRIVER: "overlay"
+  }
+  dind.tasks = [
+    "dockerd-entrypoint.sh &",
+    `printf "waiting for docker daemon"; while ! docker info >/dev/null 2>&1; do printf .; sleep 1; done; echo`,
+    "cd /src",
+    `docker login -u ${project.secrets.registryUser} -p ${project.secrets.registryToken} ${registryHost}`,
+    `docker build -t ${img}:${tag}`,
+    `docker tag ${img}:${tag} ${img}:latest`,
+    `docker push ${img}`
+  ];
+  return dind;
+}
 
 function ghNotify(state, msg, e, project) {
   const gh = new Job(`notify-${ state }`, "technosophos/github-notify:latest")
