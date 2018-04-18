@@ -45,7 +45,7 @@ events.on("push", (e, p) => {
   // flexibility of this system.
   const tests = new Job("gh-tests", "node:9-alpine")
   tests.tasks = [
-    "cd /app",
+    "cd /src",
     "yarn install",
     "yarn test"
   ]
