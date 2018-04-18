@@ -74,7 +74,7 @@ events.on("push", (e, p) => {
     "yarn test"
   ]
 
-  gh := JSON.parse(e.payload)
+  const gh = JSON.parse(e.payload)
 
   tests.run().then( ()=> {
     console.log("tests completed successfully")
