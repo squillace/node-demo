@@ -81,7 +81,7 @@ events.on("push", (e, p) => {
     ghNotify("success", "Passed", e, p).run()
   }).then(() => {
     console.log("Ref: " + gh.ref)
-    if (gh.ref.startsWith("refs/tags/") {
+    if (gh.ref.startsWith("refs/tags/")) {
       const refParts = gh.ref.split("/", 3)
       const tag = refParts[3]
       return dockerBuild(tag, e, p).run()
