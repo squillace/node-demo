@@ -1,0 +1,23 @@
+# !!!!!!!!!
+# This is a slightly weird variation on a normal Brigade project values file.
+# In this version, WE DO NOT CONNECT IT TO GIT. Instead, we connect it to
+# Draft.
+# !!!!!!!!!
+
+project: "node-demo"
+repository: "github.com/technosophos/node-demo"
+# We could fill this in, but the vcsSidecar will just ignore it.
+cloneURL: ""
+
+secrets:
+  # Go to Slack.com to get one of these for your Slack server.
+  SLACK_WEBHOOK: "FOR SLACK NOTIFICATION"
+
+# CHANGE THIS
+# This should be the name of the image that Draft builds. Usually, you will
+# just need to change technosophos to your DockerHub user/org name.
+vcsSidecar: "technosophos/node-demo:edge"
+
+allowPrivilegedJobs: "true"
+kubernetes: {}
+worker: {}
