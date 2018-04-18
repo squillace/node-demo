@@ -24,8 +24,12 @@ against the created artifacts while Draft sets everything up for you to do manua
 testing and debugging. This makes testing a transparent part of "inner loop"
 development.
 
+![inner loop](docs/images/inner-loop.png)
+
 Then, upon a `git push` to GitHub, the "outer loop" testing is triggered, and
 Brigade plays the role of a more traditional CI system.
+
+![outer loop](docs/images/outer-loop.png)
 
 ## Setting Up the Demo
 
