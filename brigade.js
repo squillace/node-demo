@@ -53,9 +53,9 @@ events.on("push", (e, p) => {
   tests.run().then( ()=> {
     console.log("tests completed successfully")
     ghNotify("success", "Passed", e, p).run()
-  }).catch((e) => {
+  }).catch((err) => {
     console.log("tests failed")
-    ghNotify("failure", `failed: ${e.toString()}`, e, p).run()
+    ghNotify("failure", `failed: ${err.toString()}`, e, p).run()
   })
 });
 
