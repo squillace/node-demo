@@ -44,6 +44,7 @@ You need to have the following configured first:
 
 1. Clone this repository
 2. `draft up && draft connect` to verify that everything works
+  - You should be able to point your browswer to http://localhost:8181/hello and see the result.
 3. Copy `example-values.yaml` to `values.yaml`, edit it, and then
   `helm install -n dev-node-demo brigade/brigade-project -f values`
 4. Go to DockerHub and find the image that you created in step #2 [example](https://hub.docker.com/r/technosophos/node-demo/)
