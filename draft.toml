@@ -6,4 +6,5 @@
     watch = false
     watch-delay = 2
     auto-connect = false
-    custom-tags = ["edge", "dev"]
+    custom-tags = ["edge"]
+    override-ports = ["8181:8080"]
