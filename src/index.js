@@ -1,27 +1,9 @@
 const http = require("http");
 const express = require("express");
 const convict = require("convict");
-
-// Example library:
 const hello = require("./hello");
 
-/*  ==== OVERVIEW ====
-This is a  basic framework for a Node.js-based app with Brigade support.
 
-There are two parts to this app:
-- CONFIGURATION: This controls what external data can be loaded
-  into this script. Following 12-Factor design, there is a preference
-  toward loading configuration through environment variables.
-- ROUTES: This script contains an Express web app. To answer web
-  hooks, you typically need to create routes to answer HTTP POST
-  requests.
-*/
-
-// ==== CONFIGURATION ====
-// Configure what values we get from environment variables. These are
-// passed into the runtime via `chart/templates/deployment.yaml`.
-// To learn more about configuration using Convict, go here:
-//   https://github.com/mozilla/node-convict
 var config = convict({
     // Example of a custom var. See chart/values.yaml for the definition.
     exampleVar: {
@@ -57,7 +39,7 @@ var config = convict({
 config.validate({allowed: 'strict'});
 
 
-// ==== REGISTER YOUR ROUTES ====
+// ==== THE MAIN STUFF ====
 const app = express();
 app.get("/hello", (req, res) => {
     // Example response:

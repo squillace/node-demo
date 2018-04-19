@@ -23,6 +23,7 @@ events.on("image_push", (e, p) => {
   // We can do insane things, like construct the image name.
   const imageName = hook.repository.repo_name + ":" + hook.push_data.tag;
   const j = new Job("test", imageName)
+  j.imageForcePull = true;
   j.tasks = [
     "yarn test"
   ];
