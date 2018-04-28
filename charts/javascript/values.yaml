@@ -1,0 +1,19 @@
+env:
+    - {name: EXAMPLE, value: 'hello world'}
+replicaCount: 1
+image:
+    repository: nginx
+    tag: stable
+    pullPolicy: IfNotPresent
+service:
+    name: nginx
+    type: ClusterIP
+    externalPort: 80
+    internalPort: 8080
+ingress:
+    enabled: false
+    hosts: [chart-example.local]
+    annotations: null
+    tls: null
+resources: {}
+
